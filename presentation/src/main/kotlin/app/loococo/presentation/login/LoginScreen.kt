@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,8 +21,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.loococo.presentation.R
-import app.loococo.presentation.component.HeightSpacer
+import app.loococo.presentation.component.MateBorderPasswordTextField
+import app.loococo.presentation.component.MateBorderTextField
 import app.loococo.presentation.component.MateLogoText
+import app.loococo.presentation.component.MateRoundButton
 
 @Composable
 internal fun LoginRoute() {
@@ -39,7 +38,6 @@ fun LoginScreen() {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        HeightSpacer(height = 40)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -59,31 +57,31 @@ fun LoginScreen() {
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text(text = "Email") },
-                modifier = Modifier.fillMaxWidth()
+            MateBorderTextField(
+                text = email,
+                hint = "email",
+                onValueChange = {
+                    email = it
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text(text = "Password") },
-                modifier = Modifier.fillMaxWidth()
+            MateBorderPasswordTextField(
+                text = password,
+                hint = "password",
+                onValueChange = {
+                    password = it
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { /* 로그인 로직 추가 */ },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Login")
-            }
-        }
+            MateRoundButton(
+                text = "Login",
+                onClick = {
 
+                }
+            )
+        }
     }
 }
