@@ -21,9 +21,10 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
+            buildConfigField("String", "API_BASE_URL", AppConfig.baseUrl)
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,6 +32,8 @@ android {
             )
         }
         debug {
+            buildConfigField("String", "API_BASE_URL", AppConfig.baseUrl)
+
             isMinifyEnabled = false
         }
     }

@@ -16,6 +16,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import app.loococo.presentation.theme.Black
 import app.loococo.presentation.theme.Gray4
@@ -23,12 +26,13 @@ import app.loococo.presentation.theme.White
 
 @Composable
 fun MateBorderTextField(
-    text: String,
+    text: TextFieldValue,
     hint: String,
     imeAction: ImeAction = ImeAction.Next,
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onValueChange: (String) -> Unit
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -40,13 +44,15 @@ fun MateBorderTextField(
         BasicTextField(
             value = text,
             onValueChange = onValueChange,
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
             textStyle = TextStyle(
                 color = Black,
             ),
             cursorBrush = SolidColor(Black),
             decorationBox = { innerTextField ->
-                if (text.isEmpty()) {
+                if (text.text.isEmpty()) {
                     Text(
                         text = hint,
                         style = TextStyle(
@@ -60,22 +66,24 @@ fun MateBorderTextField(
                 imeAction = imeAction,
                 keyboardType = keyboardType
             ),
-            keyboardActions = keyboardActions
+            keyboardActions = keyboardActions,
+            visualTransformation = visualTransformation
         )
     }
 }
 
 @Composable
 fun MateBorderPasswordTextField(
-    text: String,
+    text: TextFieldValue,
     hint: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     MateBorderTextField(
         text = text,
         hint = hint,
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Password,
+        visualTransformation = PasswordVisualTransformation(),
         onValueChange = onValueChange
     )
 }

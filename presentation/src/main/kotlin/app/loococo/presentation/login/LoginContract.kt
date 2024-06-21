@@ -1,4 +1,21 @@
 package app.loococo.presentation.login
 
-class LoginContract {
+import androidx.compose.ui.text.input.TextFieldValue
+
+data class LoginState(
+    val email: TextFieldValue = TextFieldValue(""),
+    val password: TextFieldValue = TextFieldValue(""),
+    val isLoading: Boolean = false,
+    val error: String? = null
+)
+
+sealed class LoginSideEffect {
+    data object NavigateToHome : LoginSideEffect()
+    data class ShowToast(val message: String) : LoginSideEffect()
+}
+
+sealed class LoginIntent {
+    data class EmailChanged(val email: TextFieldValue) : LoginIntent()
+    data class PasswordChanged(val password: TextFieldValue) : LoginIntent()
+    data object LoginClicked : LoginIntent()
 }

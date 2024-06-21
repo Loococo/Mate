@@ -1,6 +1,7 @@
 package app.loococo.presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +29,10 @@ fun MateRoundButton(
             disabledContentColor = White,
         ),
     ) {
-        MateBodyText(text = text, color = White)
+        MateLabelText(
+            text = text,
+            modifier = Modifier.padding(5.dp),
+            color = White
+        )
     }
 }
