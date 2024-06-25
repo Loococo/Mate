@@ -1,5 +1,6 @@
 package app.loococo.presentation.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -40,7 +43,18 @@ internal fun LoginRoute() {
 fun LoginScreen() {
     val viewModel: LoginViewModel = hiltViewModel()
     val state by viewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val sideEffectFlow = viewModel.container.sideEffectFlow
 
+    LaunchedEffect(sideEffectFlow) {
+        sideEffectFlow.collect { sideEffect ->
+            when (sideEffect) {
+                is LoginSideEffect.NavigateToHome -> {
+                }
+                is LoginSideEffect.ShowToast -> {
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center

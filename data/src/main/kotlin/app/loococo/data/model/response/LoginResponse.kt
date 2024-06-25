@@ -1,5 +1,6 @@
 package app.loococo.data.model.response
 
+import app.loococo.domain.model.User
 import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
@@ -26,3 +27,9 @@ data class LoginTokenData(
     @SerializedName("refreshToken")
     var refreshToken: String = ""
 )
+
+fun LoginResponse.toUser(): User {
+    return User(
+        name = "${user.firstName} ${user.lastName}"
+    )
+}

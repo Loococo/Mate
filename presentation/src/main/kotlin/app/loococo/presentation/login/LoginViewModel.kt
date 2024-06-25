@@ -1,11 +1,16 @@
 package app.loococo.presentation.login
 
+import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.loococo.domain.model.Resource
 import app.loococo.domain.usecase.AuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
@@ -35,6 +40,22 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun login() = intent {
-        authUseCase.login()
+        reduce { state.copy(isLoading = true, error = null) }
+        viewModelScope.launch {
+            authUseCase.login(state.email.text, state.password.text).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        Log.e("----------------","${it.data}")
+                        reduce { state.copy(isLoading = false) }
+                        postSideEffect(LoginSideEffect.NavigateToHome)
+                    }
+                    is Resource.Error -> {
+                        Log.e("----------------","${it.exception}")
+                        reduce { state.copy(isLoading = false, error = "error") }
+                        postSideEffect(LoginSideEffect.ShowToast("error"))
+                    }
+                }
+            }
+        }
     }
 }

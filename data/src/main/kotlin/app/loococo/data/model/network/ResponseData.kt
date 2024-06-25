@@ -1,10 +1,13 @@
 package app.loococo.data.model.network
 
+import android.util.Log
+import app.loococo.domain.model.Resource
+import app.loococo.domain.model.ResourceException
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 data class ResponseData<T>(
     @field:SerializedName("data")
@@ -17,27 +20,23 @@ data class ResponseData<T>(
     val msg: String? = null
 )
 
-sealed class ResponseResult<out T> {
-    class Success<out T>(val value: T) : ResponseResult<T>()
-    data class Error(val code: Int, val message: String?) : ResponseResult<Nothing>()
-    data class Exception(val exception: Throwable?) : ResponseResult<Nothing>()
-}
-
 suspend fun <T : Any> suspendResponseResult(
     execute: suspend () -> Response<ResponseData<T>>
-): Flow<ResponseResult<T>> = flow {
-    try {
-        val response = execute()
-        val body = response.body()
-        val data = response.body()?.data
-        if (response.isSuccessful && body != null && data != null) {
-            emit(ResponseResult.Success(data))
-        } else {
-            emit(ResponseResult.Error(code = response.code(), message = response.message()))
+): Flow<Resource<T>> = flow {
+    emit(
+        try {
+            val response = execute()
+            if (response.isSuccessful) {
+                response.body()?.data?.let {
+                    Resource.Success(it)
+                } ?: Resource.Error(ResourceException.NoDataException)
+            } else {
+                Resource.Error(ResourceException.HttpException(response.code(), response.message()))
+            }
+        } catch (e: IOException) {
+            Resource.Error(ResourceException.NetworkException(e))
+        } catch (e: Exception) {
+            Resource.Error(ResourceException.UnknownException(e))
         }
-    } catch (e: HttpException) {
-        emit(ResponseResult.Error(code = e.code(), message = e.message()))
-    } catch (e: Throwable) {
-        emit(ResponseResult.Exception(e))
-    }
+    )
 }
