@@ -8,26 +8,22 @@ object Version {
         const val CORE = "androidx.core:core-ktx:1.12.0"
     }
 
-    object COMPOSE {
-        const val ACTIVITY = "androidx.activity:activity-compose:1.9.0-alpha03"
-        const val BOM = "androidx.compose:compose-bom:2024.02.00"
-        const val UI = "androidx.compose.ui:ui:1.6.2"
-        const val UI_GRAPHICS = "androidx.compose.ui:ui-graphics"
-        const val UI_TOOLING_PREVIEW = "androidx.compose.ui:ui-tooling-preview"
-        const val NAVIGATION = "androidx.navigation:navigation-compose:2.7.6"
-        const val LIVEDATA = "androidx.compose.runtime:runtime-livedata"
-        const val LIFECYCLE = "androidx.lifecycle:lifecycle-runtime-compose:2.7.0"
+    object KOTLIN {
+        const val KOTLINX = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
     }
 
-    object AndroidTest {
-        const val TEST_RUNNER = "androidx.test.ext:junit:1.1.5"
-        const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:3.5.1"
+    object COMPOSE {
+        const val ACTIVITY = "androidx.activity:activity-compose:1.9.0-alpha03"
+        const val BOM = "androidx.compose:compose-bom:2024.06.00"
+        const val UI = "androidx.compose.ui:ui"
+        const val NAVIGATION = "androidx.navigation:navigation-compose:2.8.0-alpha08"
     }
 
     object HILT {
-        const val HILT_ANDROID = "com.google.dagger:hilt-android:2.49"
-        const val HILT_ANDROID_COMPILER = "com.google.dagger:hilt-android-compiler:2.49"
+        const val HILT_ANDROID = "com.google.dagger:hilt-android:2.51.1"
+        const val HILT_ANDROID_COMPILER = "com.google.dagger:hilt-android-compiler:2.51.1"
         const val HILT_VIEWMODEL = "androidx.hilt:hilt-navigation-compose:1.2.0"
+        const val DAGGER_HILT_JAVAX = "javax.inject:javax.inject:1"
     }
 
     object RETROFIT {

@@ -14,12 +14,13 @@ import app.loococo.presentation.theme.White
 
 @Composable
 fun MateRoundButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
@@ -31,7 +32,6 @@ fun MateRoundButton(
     ) {
         MateLabelText(
             text = text,
-            modifier = Modifier.padding(5.dp),
             color = White
         )
     }

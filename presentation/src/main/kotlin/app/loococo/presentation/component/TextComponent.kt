@@ -77,7 +77,7 @@ fun MateLogoText(
     Text(
         text = text,
         modifier = modifier,
-        fontSize = 25.sp,
+        fontSize = 30.sp,
         fontWeight = fontWeight,
         textAlign = textAlign,
         textDecoration = textDecoration,

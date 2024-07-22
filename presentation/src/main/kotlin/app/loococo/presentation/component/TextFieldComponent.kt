@@ -39,13 +39,13 @@ fun MateBorderTextField(
             .fillMaxWidth()
             .background(White, RoundedCornerShape(10.dp))
             .border(1.dp, Black, RoundedCornerShape(10.dp))
-            .padding(15.dp, 5.dp)
+            .padding(10.dp, 5.dp)
     ) {
         BasicTextField(
             value = text,
             onValueChange = onValueChange,
             modifier = Modifier
-                .padding(10.dp)
+                .padding(12.dp)
                 .fillMaxWidth(),
             textStyle = TextStyle(
                 color = Black,
@@ -76,12 +76,13 @@ fun MateBorderTextField(
 fun MateBorderPasswordTextField(
     text: TextFieldValue,
     hint: String,
+    imeAction: ImeAction = ImeAction.Done,
     onValueChange: (TextFieldValue) -> Unit
 ) {
     MateBorderTextField(
         text = text,
         hint = hint,
-        imeAction = ImeAction.Done,
+        imeAction = imeAction,
         keyboardType = KeyboardType.Password,
         visualTransformation = PasswordVisualTransformation(),
         onValueChange = onValueChange

@@ -14,5 +14,5 @@ object AppConfig {
     const val pluginVersion = "8.1.2"
     const val kotlin = "1.9.0"
 
-    const val baseUrl =  "\"https://test.test\""
+    const val baseUrl =  "\"https://test.test/\""
 }

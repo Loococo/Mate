@@ -1,6 +1,7 @@
 package app.loococo.mate
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -25,7 +26,11 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MateApp()
+            MateApp(
+                showToast = {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }
