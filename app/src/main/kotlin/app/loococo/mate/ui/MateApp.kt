@@ -10,14 +10,15 @@ import app.loococo.presentation.theme.White
 
 @Composable
 fun MateApp(
-    appState: MateAppState = rememberMateAppState()
+    appState: MateAppState = rememberMateAppState(),
+    showToast: (String) -> Unit
 ) {
     MateTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = White
         ) {
-            MateNavHost(appState)
+            MateNavHost(appState, showToast)
         }
     }
 }

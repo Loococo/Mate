@@ -21,9 +21,10 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
+            buildConfigField("String", "API_BASE_URL", AppConfig.baseUrl)
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,6 +32,8 @@ android {
             )
         }
         debug {
+            buildConfigField("String", "API_BASE_URL", AppConfig.baseUrl)
+
             isMinifyEnabled = false
         }
     }
@@ -62,19 +65,14 @@ dependencies {
     implementation(Version.KTX.CORE)
 
     implementation(Version.COMPOSE.ACTIVITY)
-    implementation(platform(Version.COMPOSE.BOM))
     implementation(Version.COMPOSE.UI)
-    implementation(Version.COMPOSE.UI_GRAPHICS)
-    implementation(Version.COMPOSE.UI_TOOLING_PREVIEW)
     implementation(Version.COMPOSE.NAVIGATION)
 
     implementation(Version.AndroidX.MATERIAL3)
-    implementation(Version.AndroidX.SPLASH)
 
     implementation(Version.HILT.HILT_ANDROID)
 
     kapt(Version.HILT.HILT_ANDROID_COMPILER)
-
 
     implementation(Version.RETROFIT.RETROFIT_ANDROID)
     implementation(Version.RETROFIT.RETROFIT_GSON)
@@ -85,7 +83,5 @@ dependencies {
     implementation(Version.ROOM.ROOM_KTX)
     kapt(Version.ROOM.ROOM_KTX_COMPILER)
 
-    androidTestImplementation(Version.AndroidTest.TEST_RUNNER)
-    androidTestImplementation(Version.AndroidTest.ESPRESSO_CORE)
-    androidTestImplementation(platform(Version.COMPOSE.BOM))
+    implementation(Version.AndroidX.SPLASH)
 }
