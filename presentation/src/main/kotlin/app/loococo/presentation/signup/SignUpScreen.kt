@@ -1,6 +1,7 @@
 package app.loococo.presentation.signup
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,15 +30,15 @@ import app.loococo.presentation.component.MateTitleText
 
 @Composable
 internal fun SignUpRoute(
-    goToHome: () -> Unit,
+    goToLogin: () -> Unit,
     showToast: (String) -> Unit
 ) {
-    SignUpScreen(goToHome, showToast)
+    SignUpScreen(goToLogin, showToast)
 }
 
 @Composable
 fun SignUpScreen(
-    goToHome: () -> Unit,
+    goToLogin: () -> Unit,
     showToast: (String) -> Unit
 ) {
     val viewModel: SignUpViewModel = hiltViewModel()
@@ -48,7 +49,7 @@ fun SignUpScreen(
     LaunchedEffect(sideEffectFlow) {
         sideEffectFlow.collect { sideEffect ->
             when (sideEffect) {
-                is SignUpSideEffect.NavigateToHome -> goToHome()
+                is SignUpSideEffect.NavigateToLogin -> goToLogin()
                 is SignUpSideEffect.ShowToast -> showToast(sideEffect.message)
             }
         }
@@ -56,7 +57,9 @@ fun SignUpScreen(
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .verticalScroll(scrollState)) {
+        .verticalScroll(scrollState)
+        .height(IntrinsicSize.Max)
+    ) {
         SignUpHeader()
         SignUpContent(
             email = state.email,

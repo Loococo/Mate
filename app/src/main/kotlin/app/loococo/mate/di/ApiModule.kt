@@ -1,6 +1,6 @@
 package app.loococo.mate.di
 
-import app.fuyuki.kioku.di.network.OtherNetworkClient
+import app.loococo.mate.di.network.OtherNetworkClient
 import app.loococo.data.remote.api.AuthApi
 import dagger.Module
 import dagger.Provides

@@ -5,8 +5,10 @@ import androidx.navigation.compose.NavHost
 import app.loococo.mate.ui.MateAppState
 import app.loococo.presentation.login.loginRoute
 import app.loococo.presentation.login.loginScreen
+import app.loococo.presentation.login.navigateToLogin
 import app.loococo.presentation.signup.navigateToSignUp
 import app.loococo.presentation.signup.signUpScreen
+import app.loococo.presentation.workspace.workspaceScreen
 
 @Composable
 fun MateNavHost(
@@ -28,10 +30,10 @@ fun MateNavHost(
         )
 
         signUpScreen(
-            goToHome = {
-
-            },
+            goToLogin = { navController.navigateToLogin() },
             showToast = showToast
         )
+
+        workspaceScreen(showToast)
     }
 }

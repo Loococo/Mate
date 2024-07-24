@@ -27,7 +27,7 @@ data class ErrorHandler(
 )
 
 suspend fun <T : Any> suspendResponseResult(
-    execute: suspend () -> Response<ResponseData<T>>
+    execute: suspend () -> Response<T>
 ): Flow<Resource<T>> = flow {
     val gson = GsonBuilder().create()
 
@@ -35,8 +35,8 @@ suspend fun <T : Any> suspendResponseResult(
         val response = execute()
         if (response.isSuccessful) {
             val body = response.body()
-            if (body?.data != null) {
-                emit(Resource.Success(body.data))
+            if (body != null) {
+                emit(Resource.Success(body))
             } else {
                 emit(Resource.Error(ResourceException.UnknownException))
             }
@@ -55,3 +55,33 @@ suspend fun <T : Any> suspendResponseResult(
         emit(Resource.Error(ResourceException.NetworkException))
     }
 }
+
+//suspend fun <T : Any> suspendResponseResult(
+//    execute: suspend () -> Response<ResponseData<T>>
+//): Flow<Resource<T>> = flow {
+//    val gson = GsonBuilder().create()
+//
+//    try {
+//        val response = execute()
+//        if (response.isSuccessful) {
+//            val body = response.body()
+//            if (body?.data != null) {
+//                emit(Resource.Success(body.data))
+//            } else {
+//                emit(Resource.Error(ResourceException.UnknownException))
+//            }
+//        } else {
+//            try {
+//                val wrapper: ErrorHandler = gson.fromJson(
+//                    response.errorBody()!!.charStream(),
+//                    ErrorHandler::class.java
+//                )
+//                emit(Resource.Error(ResourceException.HttpException(wrapper.code, wrapper.message)))
+//            } catch (e: Exception) {
+//                emit(Resource.Error(ResourceException.UnknownException))
+//            }
+//        }
+//    } catch (e: Exception) {
+//        emit(Resource.Error(ResourceException.NetworkException))
+//    }
+//}

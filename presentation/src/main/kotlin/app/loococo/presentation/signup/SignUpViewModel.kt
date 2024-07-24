@@ -61,7 +61,7 @@ class SignUpViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {
                         reduce { state.copy(isLoading = false) }
-                        postSideEffect(SignUpSideEffect.NavigateToHome)
+                        postSideEffect(SignUpSideEffect.NavigateToLogin)
                     }
 
                     is Resource.Error -> {

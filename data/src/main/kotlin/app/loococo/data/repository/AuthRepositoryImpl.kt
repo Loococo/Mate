@@ -11,12 +11,14 @@ import app.loococo.domain.model.User
 import app.loococo.domain.model.network.Resource
 import app.loococo.domain.model.network.ResourceException
 import app.loococo.domain.repository.AuthRepository
+import app.loococo.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authDataSource: AuthDataSource
+    private val authDataSource: AuthDataSource,
+    private val preferencesRepository: PreferencesRepository
 ) : AuthRepository {
 
     private fun validateCredentials(email: String, password: String): Resource.Message? {
@@ -55,7 +57,12 @@ class AuthRepositoryImpl @Inject constructor(
         authDataSource.login(LoginRequest(email, password)).collect { result ->
             emit(
                 when (result) {
-                    is Resource.Success -> Resource.Success(result.data.toUser())
+                    is Resource.Success -> {
+                        val user = result.data.toUser()
+                        preferencesRepository.saveUser(user)
+                        Resource.Success(user)
+                    }
+
                     is Resource.Error -> {
                         when (val exception = result.exception) {
                             is ResourceException.HttpException -> {
@@ -81,7 +88,7 @@ class AuthRepositoryImpl @Inject constructor(
         password: String,
         firstName: String,
         lastName: String
-    ): Flow<Resource<User>> = flow {
+    ): Flow<Resource<Unit>> = flow {
         val validationError = validateSignUp(email, password, firstName, lastName)
         if (validationError != null) {
             emit(validationError)
@@ -90,13 +97,7 @@ class AuthRepositoryImpl @Inject constructor(
 
         authDataSource.signUp(SignUpRequest(email, password, firstName, lastName))
             .collect { result ->
-                emit(
-                    when (result) {
-                        is Resource.Success -> Resource.Success(result.data.toUser())
-                        is Resource.Error -> result
-                        is Resource.Message -> result
-                    }
-                )
+                emit(result)
             }
     }
 }

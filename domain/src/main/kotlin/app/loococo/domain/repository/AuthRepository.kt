@@ -11,5 +11,5 @@ interface AuthRepository {
         password: String,
         firstName: String,
         lastName: String
-    ): Flow<Resource<User>>
+    ): Flow<Resource<Unit>>
 }

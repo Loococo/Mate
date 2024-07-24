@@ -16,7 +16,7 @@ class AuthDataSourceImpl @Inject constructor(
     override suspend fun login(data: LoginRequest): Flow<Resource<LoginResponse>> =
         suspendResponseResult { authApi.login(data) }
 
-    override suspend fun signUp(data: SignUpRequest): Flow<Resource<LoginResponse>> =
+    override suspend fun signUp(data: SignUpRequest): Flow<Resource<Unit>> =
         suspendResponseResult { authApi.signUp(data) }
 
 }

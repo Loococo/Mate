@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthDataSource {
     suspend fun login(data: LoginRequest): Flow<Resource<LoginResponse>>
-    suspend fun signUp(data: SignUpRequest): Flow<Resource<LoginResponse>>
+    suspend fun signUp(data: SignUpRequest): Flow<Resource<Unit>>
 }

@@ -1,7 +1,8 @@
 package app.loococo.mate.di
 
-import app.fuyuki.kioku.di.network.AuthNetworkClient
-import app.fuyuki.kioku.di.network.OtherNetworkClient
+import app.loococo.domain.repository.PreferencesRepository
+import app.loococo.mate.di.network.AuthNetworkClient
+import app.loococo.mate.di.network.OtherNetworkClient
 import app.loococo.mate.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -46,12 +47,13 @@ class RetrofitModule {
     @Provides
     fun providerAuthNetworkClient(
         clientBuilder: OkHttpClient.Builder,
+        repository: PreferencesRepository
     ): OkHttpClient = clientBuilder
         .addInterceptor {
             val old = it.request()
             val request = old.newBuilder()
                 .removeHeader("Authorization")
-                .addHeader("Authorization", "Bearer")
+                .addHeader("Authorization", "Bearer ${repository.getId()}")
                 .method(old.method, old.body)
                 .build()
             it.proceed(request)

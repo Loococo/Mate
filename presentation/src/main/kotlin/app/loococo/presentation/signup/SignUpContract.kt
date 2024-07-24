@@ -11,7 +11,7 @@ data class SignUpState(
 )
 
 sealed class SignUpSideEffect {
-    data object NavigateToHome : SignUpSideEffect()
+    data object NavigateToLogin : SignUpSideEffect()
     data class ShowToast(val message: String) : SignUpSideEffect()
 }
 

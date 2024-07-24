@@ -6,7 +6,9 @@ import app.loococo.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class AuthUseCase @Inject constructor(private val authRepository: AuthRepository) {
+class AuthUseCase @Inject constructor(
+    private val authRepository: AuthRepository
+) {
     suspend fun login(email: String, password: String): Flow<Resource<User>> {
         return authRepository.login(email, password)
     }
@@ -16,7 +18,7 @@ class AuthUseCase @Inject constructor(private val authRepository: AuthRepository
         password: String,
         firstName: String,
         lastName: String
-    ): Flow<Resource<User>> {
+    ): Flow<Resource<Unit>> {
         return authRepository.signUp(email, password, firstName, lastName)
     }
 }

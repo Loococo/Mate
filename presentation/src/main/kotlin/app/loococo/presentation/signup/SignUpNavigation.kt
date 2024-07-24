@@ -7,11 +7,11 @@ import androidx.navigation.compose.composable
 const val signUpRoute = "sign_up_route"
 
 fun NavGraphBuilder.signUpScreen(
-    goToHome: () -> Unit,
+    goToLogin: () -> Unit,
     showToast: (String) -> Unit
 ) {
     composable(route = signUpRoute) {
-        SignUpRoute(goToHome, showToast)
+        SignUpRoute(goToLogin, showToast)
     }
 }
 

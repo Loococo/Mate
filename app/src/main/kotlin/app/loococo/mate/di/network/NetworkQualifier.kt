@@ -1,4 +1,4 @@
-package app.fuyuki.kioku.di.network
+package app.loococo.mate.di.network
 
 import javax.inject.Qualifier
 
