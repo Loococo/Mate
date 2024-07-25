@@ -19,6 +19,7 @@ class LoginViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
 ) :
     ContainerHost<LoginState, LoginSideEffect>, ViewModel() {
+
     override val container =
         container<LoginState, LoginSideEffect>(LoginState())
 

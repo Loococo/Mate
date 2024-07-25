@@ -5,8 +5,11 @@ import app.loococo.data.ext.isValidName
 import app.loococo.data.ext.isValidPassword
 import app.loococo.data.model.request.LoginRequest
 import app.loococo.data.model.request.SignUpRequest
+import app.loococo.data.model.request.TokenRequest
+import app.loococo.data.model.response.toToken
 import app.loococo.data.model.response.toUser
 import app.loococo.data.remote.manger.AuthDataSource
+import app.loococo.domain.model.Token
 import app.loococo.domain.model.User
 import app.loococo.domain.model.network.Resource
 import app.loococo.domain.model.network.ResourceException

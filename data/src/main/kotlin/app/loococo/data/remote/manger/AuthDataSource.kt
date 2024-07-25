@@ -2,7 +2,9 @@ package app.loococo.data.remote.manger
 
 import app.loococo.data.model.request.LoginRequest
 import app.loococo.data.model.request.SignUpRequest
+import app.loococo.data.model.request.TokenRequest
 import app.loococo.data.model.response.LoginResponse
+import app.loococo.data.model.response.LoginTokenData
 import app.loococo.domain.model.network.Resource
 import kotlinx.coroutines.flow.Flow
 

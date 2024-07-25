@@ -1,15 +1,17 @@
 package app.loococo.mate.di
 
 import app.loococo.domain.repository.PreferencesRepository
+import app.loococo.mate.BuildConfig
 import app.loococo.mate.di.network.AuthNetworkClient
 import app.loococo.mate.di.network.OtherNetworkClient
-import app.loococo.mate.BuildConfig
+import app.loococo.mate.di.network.TokenAuthenticator
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,6 +22,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class RetrofitModule {
+
     @Provides
     @Singleton
     fun provideGson(): Gson = GsonBuilder()
@@ -30,7 +33,7 @@ class RetrofitModule {
         }.create()
 
     @Provides
-    fun providerNetworkClientBuilder(): OkHttpClient.Builder {
+    fun provideNetworkClientBuilder(): OkHttpClient.Builder {
         val builder = OkHttpClient.Builder()
         builder.addInterceptor(
             HttpLoggingInterceptor().apply {
@@ -38,50 +41,53 @@ class RetrofitModule {
             }
         )
         builder
-            .writeTimeout(60, TimeUnit.MINUTES)
-            .readTimeout(60, TimeUnit.MINUTES)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
         return builder
     }
 
     @AuthNetworkClient
     @Provides
-    fun providerAuthNetworkClient(
+    fun provideAuthNetworkClient(
         clientBuilder: OkHttpClient.Builder,
-        repository: PreferencesRepository
+        tokenAuthenticator: TokenAuthenticator,
+        preferencesRepository: PreferencesRepository
     ): OkHttpClient = clientBuilder
-        .addInterceptor {
-            val old = it.request()
-            val request = old.newBuilder()
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
                 .removeHeader("Authorization")
-                .addHeader("Authorization", "Bearer ${repository.getId()}")
-                .method(old.method, old.body)
+                .addHeader("Authorization", "Bearer ${preferencesRepository.getId()}")
                 .build()
-            it.proceed(request)
-        }.build()
+            chain.proceed(request)
+        }
+        .authenticator(tokenAuthenticator)
+        .build()
 
     @OtherNetworkClient
     @Provides
-    fun providerOtherNetworkClient(
-        clientBuilder: OkHttpClient.Builder,
+    fun provideOtherNetworkClient(
+        clientBuilder: OkHttpClient.Builder
     ): OkHttpClient = clientBuilder.build()
-
 
     @AuthNetworkClient
     @Provides
-    fun providerAuthRetrofit(@AuthNetworkClient client: OkHttpClient, gson: Gson): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(client)
-            .build()
+    fun provideAuthRetrofit(
+        @AuthNetworkClient client: OkHttpClient,
+        gson: Gson
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.API_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(client)
+        .build()
 
     @OtherNetworkClient
     @Provides
-    fun providerOtherRetrofit(@AuthNetworkClient client: OkHttpClient, gson: Gson): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(client)
-            .build()
-
+    fun provideOtherRetrofit(
+        @OtherNetworkClient client: OkHttpClient,
+        gson: Gson
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.API_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(client)
+        .build()
 }
