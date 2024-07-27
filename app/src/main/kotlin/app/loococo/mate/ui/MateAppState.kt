@@ -6,20 +6,30 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.loococo.domain.model.state.MainUiState
+import app.loococo.presentation.login.loginRoute
+import app.loococo.presentation.workspace.workspaceRoute
 
 @Composable
 fun rememberMateAppState(
     navController: NavHostController = rememberNavController(),
+    uiState: MainUiState
 ): MateAppState {
-    return remember(navController) {
+    return remember(navController, uiState) {
         MateAppState(
-            navController = navController
+            navController = navController,
+            uiState = uiState
         )
     }
 }
 
 @Stable
 class MateAppState(
-    val navController: NavHostController
+    val navController: NavHostController,
+    val uiState: MainUiState
 ) {
+
+    val startDestination = when (uiState) {
+        MainUiState.Workspace -> workspaceRoute
+        MainUiState.Login -> loginRoute
+    }
 }

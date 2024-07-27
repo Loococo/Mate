@@ -11,7 +11,7 @@ import app.loococo.presentation.theme.White
 
 @Composable
 fun MateApp(
-    appState: MateAppState = rememberMateAppState(),
+    appState: MateAppState,
     showToast: (String) -> Unit,
 ) {
     MateTheme {

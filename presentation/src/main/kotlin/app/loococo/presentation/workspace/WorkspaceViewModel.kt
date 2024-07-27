@@ -1,12 +1,14 @@
 package app.loococo.presentation.workspace
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.loococo.domain.model.network.Resource
 import app.loococo.domain.usecase.WorkspaceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -18,17 +20,29 @@ class WorkspaceViewModel @Inject constructor(
     override val container =
         container<WorkspaceState, WorkspaceEffect>(WorkspaceState())
 
-//    init {
-//        viewModelScope.launch {
-//            workspaceUseCase.findWorkspaceList()
-//        }
-//    }
+    init {
+        findWorkspaceList()
+    }
 
-    fun a(){
+    private fun findWorkspaceList() = intent {
+        reduce { state.copy(isLoading = true) }
+
         viewModelScope.launch {
-            Log.e("----------------","1")
-            workspaceUseCase.findWorkspaceList().collect{
+            workspaceUseCase.findWorkspaceList().collect {
+                reduce { state.copy(isLoading = false) }
 
+                when(it) {
+                    is Resource.Success -> {
+                        reduce { state.copy(workspaceList = it.data) }
+
+                    }
+                    is Resource.Error -> {
+
+                    }
+                    is Resource.Message -> {
+
+                    }
+                }
             }
         }
     }

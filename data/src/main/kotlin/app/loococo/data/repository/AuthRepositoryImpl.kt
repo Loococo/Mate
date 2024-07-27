@@ -62,7 +62,9 @@ class AuthRepositoryImpl @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         val user = result.data.toUser()
+                        val token = result.data.tokens.toToken()
                         preferencesRepository.saveUser(user)
+                        preferencesRepository.saveToken(token)
                         Resource.Success(user)
                     }
 

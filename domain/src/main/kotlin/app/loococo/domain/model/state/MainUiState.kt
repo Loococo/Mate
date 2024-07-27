@@ -2,7 +2,11 @@ package app.loococo.domain.model.state
 
 
 sealed interface MainUiState {
-    data object Loading : MainUiState
-    data object Success : MainUiState
-    data object Failed : MainUiState
+    data object Workspace : MainUiState
+    data object Login : MainUiState
+}
+
+sealed interface SplashState{
+    data object Loading:SplashState
+    data object Success:SplashState
 }

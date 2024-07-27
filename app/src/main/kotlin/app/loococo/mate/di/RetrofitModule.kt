@@ -1,5 +1,6 @@
 package app.loococo.mate.di
 
+import android.util.Log
 import app.loococo.domain.repository.PreferencesRepository
 import app.loococo.mate.BuildConfig
 import app.loococo.mate.di.network.AuthNetworkClient
@@ -11,7 +12,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -54,11 +54,21 @@ class RetrofitModule {
         preferencesRepository: PreferencesRepository
     ): OkHttpClient = clientBuilder
         .addInterceptor { chain ->
-            val request = chain.request().newBuilder()
-                .removeHeader("Authorization")
-                .addHeader("Authorization", "Bearer ${preferencesRepository.getId()}")
-                .build()
-            chain.proceed(request)
+            Log.e("----------------","${preferencesRepository.getToken()}")
+            if (preferencesRepository.getToken()?.accessToken != null) {
+                val old = chain.request()
+                val request = old.newBuilder()
+                    .removeHeader("Authorization")
+                    .addHeader(
+                        "Authorization",
+                        "Bearer ${preferencesRepository.getToken()?.accessToken ?: ""}"
+                    )
+                    .method(old.method, old.body)
+                    .build()
+                chain.proceed(request)
+            } else {
+                chain.proceed(chain.request())
+            }
         }
         .authenticator(tokenAuthenticator)
         .build()

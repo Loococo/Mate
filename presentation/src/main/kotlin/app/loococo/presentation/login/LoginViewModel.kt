@@ -45,19 +45,18 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             authUseCase.login(state.email.text, state.password.text).collect {
+                reduce { state.copy(isLoading = false) }
+
                 when (it) {
                     is Resource.Success -> {
-                        reduce { state.copy(isLoading = false) }
                         postSideEffect(LoginSideEffect.NavigateToHome)
                     }
 
                     is Resource.Error -> {
-                        reduce { state.copy(isLoading = false) }
                         postSideEffect(LoginSideEffect.ShowToast("error"))
                     }
 
                     is Resource.Message -> {
-                        reduce { state.copy(isLoading = false) }
                         postSideEffect(LoginSideEffect.ShowToast(it.message))
                     }
                 }

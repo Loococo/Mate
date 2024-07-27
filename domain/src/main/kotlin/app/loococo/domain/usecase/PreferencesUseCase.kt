@@ -1,6 +1,7 @@
 package app.loococo.domain.usecase
 
 import app.loococo.domain.model.state.MainUiState
+import app.loococo.domain.model.state.SplashState
 import app.loococo.domain.repository.PreferencesRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -10,15 +11,18 @@ import javax.inject.Inject
 class PreferencesUseCase @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) {
-    fun getUserState(): Flow<MainUiState> = flow {
-        emit(MainUiState.Loading)
-        delay(1000)
-        val user = preferencesRepository.getUser()
-        if (user != null) {
-            emit(MainUiState.Success)
-        } else {
-            emit(MainUiState.Failed)
-        }
+    fun getSplashState(): Flow<SplashState> = flow {
+        emit(SplashState.Loading)
+        delay(2000)
+        emit(SplashState.Success)
     }
 
+    fun getUserState(): Flow<MainUiState> = flow {
+        val user = preferencesRepository.getUser()
+        if (user != null) {
+            emit(MainUiState.Workspace)
+        } else {
+            emit(MainUiState.Login)
+        }
+    }
 }

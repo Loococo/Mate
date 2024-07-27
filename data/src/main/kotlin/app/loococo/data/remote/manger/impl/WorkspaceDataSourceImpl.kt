@@ -1,6 +1,7 @@
 package app.loococo.data.remote.manger.impl
 
 import app.loococo.data.model.network.suspendResponseResult
+import app.loococo.data.model.response.WorkspaceResponse
 import app.loococo.data.remote.api.WorkspaceApi
 import app.loococo.data.remote.manger.WorkspaceDataSource
 import app.loococo.domain.model.network.Resource
@@ -10,6 +11,6 @@ import javax.inject.Inject
 class WorkspaceDataSourceImpl @Inject constructor(
     private val workspaceApi: WorkspaceApi
 ) : WorkspaceDataSource {
-    override suspend fun findWorkspaceList(): Flow<Resource<Unit>> =
+    override suspend fun findWorkspaceList(): Flow<Resource<List<WorkspaceResponse>>> =
         suspendResponseResult { workspaceApi.findWorkspaceList() }
 }

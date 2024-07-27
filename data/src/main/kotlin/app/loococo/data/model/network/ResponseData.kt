@@ -8,17 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-data class ResponseData<T>(
-    @field:SerializedName("data")
-    val data: T? = null,
-
-    @field:SerializedName("msgCode")
-    val msgCode: String? = null,
-
-    @field:SerializedName("msg")
-    val msg: String? = null
-)
-
 data class ErrorHandler(
     @field:SerializedName("code")
     val code: String,
