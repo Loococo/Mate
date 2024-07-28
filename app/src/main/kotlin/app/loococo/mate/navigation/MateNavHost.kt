@@ -1,6 +1,7 @@
 package app.loococo.mate.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import app.loococo.mate.ui.MateAppState
 import app.loococo.presentation.login.loginScreen
@@ -33,5 +34,9 @@ fun MateNavHost(
         )
 
         workspaceScreen(showToast)
+    }
+
+    LaunchedEffect(appState.authenticatedState, appState.uiState) {
+        appState.handleNavigation()
     }
 }

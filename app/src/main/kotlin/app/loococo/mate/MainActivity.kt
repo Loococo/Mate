@@ -12,7 +12,6 @@ import app.loococo.domain.model.state.SplashState
 import app.loococo.mate.ui.MateApp
 import app.loococo.mate.ui.rememberMateAppState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,13 +24,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             val splashState by viewModel.splashState.collectAsStateWithLifecycle()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val authenticatedState by viewModel.authenticatedState.collectAsStateWithLifecycle()
 
             splashScreen.setKeepOnScreenCondition {
                 splashState == SplashState.Loading
             }
 
             MateApp(
-                appState = rememberMateAppState(uiState = uiState),
+                appState = rememberMateAppState(
+                    uiState = uiState,
+                    authenticatedState = authenticatedState
+                ),
                 showToast = {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 }

@@ -8,15 +8,22 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import java.io.IOException
 import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val authenticationManager: AuthenticationManager
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        val token = preferencesRepository.getToken() ?: return null
+        val token = preferencesRepository.getToken()
+
+        if (token == null) {
+            authenticationManager.setAuthenticated(false)
+            return null
+        }
 
         val newToken = try {
             val refreshTokenResponse =
@@ -28,13 +35,19 @@ class TokenAuthenticator @Inject constructor(
             }
         } catch (e: Exception) {
             null
-        } ?: return null
+        }
 
-        preferencesRepository.saveToken(newToken.toToken())
+        if (newToken == null) {
+            authenticationManager.setAuthenticated(false)
+        } else {
+            authenticationManager.setAuthenticated(true)
+            preferencesRepository.saveToken(newToken.toToken())
+        }
 
         return response.request.newBuilder()
             .removeHeader("Authorization")
-            .addHeader("Authorization", "Bearer ${newToken.accessToken}")
+            .addHeader("Authorization", "Bearer ${newToken?.accessToken ?: ""}")
             .build()
     }
 }
+

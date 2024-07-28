@@ -54,7 +54,6 @@ class RetrofitModule {
         preferencesRepository: PreferencesRepository
     ): OkHttpClient = clientBuilder
         .addInterceptor { chain ->
-            Log.e("----------------","${preferencesRepository.getToken()}")
             if (preferencesRepository.getToken()?.accessToken != null) {
                 val old = chain.request()
                 val request = old.newBuilder()
