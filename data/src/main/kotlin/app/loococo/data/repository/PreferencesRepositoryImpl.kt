@@ -29,4 +29,9 @@ class PreferencesRepositoryImpl @Inject constructor(
     override fun getToken(): Token? {
         return preferencesManager.getObject("token", Token::class.java)
     }
+
+    override fun removeUser() {
+        preferencesManager.removeObject("user")
+        preferencesManager.removeObject("token")
+    }
 }

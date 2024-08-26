@@ -1,6 +1,5 @@
 package app.loococo.mate.di
 
-import android.util.Log
 import app.loococo.domain.repository.PreferencesRepository
 import app.loococo.mate.BuildConfig
 import app.loococo.mate.di.network.AuthNetworkClient
@@ -60,7 +59,7 @@ class RetrofitModule {
                     .removeHeader("Authorization")
                     .addHeader(
                         "Authorization",
-                        "Bearer ${preferencesRepository.getToken()?.accessToken ?: ""}"
+                        "Bearer ${preferencesRepository.getToken()!!.accessToken}"
                     )
                     .method(old.method, old.body)
                     .build()

@@ -88,3 +88,22 @@ fun MateBorderPasswordTextField(
         onValueChange = onValueChange
     )
 }
+
+@Composable
+fun MateBorderSlugTextField(
+    text: TextFieldValue,
+    hint: String,
+    onValueChange: (TextFieldValue) -> Unit
+) {
+    MateBorderTextField(
+        text = text,
+        hint = hint,
+        keyboardType = KeyboardType.Text,
+        onValueChange = { newTextFieldValue ->
+            val filteredText = newTextFieldValue.text
+                .filter { it.isLowerCase() || it.isDigit() || it.isWhitespace() }
+                .replace(' ', '-')  // 공백을 '-'로 치환
+            onValueChange(newTextFieldValue.copy(text = filteredText))
+        }
+    )
+}

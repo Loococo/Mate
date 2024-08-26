@@ -12,4 +12,8 @@ class WorkspaceUseCase @Inject constructor(
     suspend fun findWorkspaceList(): Flow<Resource<List<Workspace>>> {
         return workspaceRepository.findWorkspaceList()
     }
+
+    suspend fun create(name: String, slug: String): Flow<Resource<Unit>> {
+        return workspaceRepository.create(name, slug)
+    }
 }

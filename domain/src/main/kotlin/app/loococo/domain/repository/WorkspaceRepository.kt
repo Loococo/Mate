@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface WorkspaceRepository {
 
     suspend fun findWorkspaceList(): Flow<Resource<List<Workspace>>>
+
+    suspend fun create(name: String, slug: String): Flow<Resource<Unit>>
 }

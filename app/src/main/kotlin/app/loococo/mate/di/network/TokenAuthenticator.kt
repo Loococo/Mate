@@ -21,7 +21,7 @@ class TokenAuthenticator @Inject constructor(
         val token = preferencesRepository.getToken()
 
         if (token == null) {
-            authenticationManager.setAuthenticated(false)
+            authenticationManager.logout(true)
             return null
         }
 
@@ -38,9 +38,9 @@ class TokenAuthenticator @Inject constructor(
         }
 
         if (newToken == null) {
-            authenticationManager.setAuthenticated(false)
+            authenticationManager.logout(true)
         } else {
-            authenticationManager.setAuthenticated(true)
+            authenticationManager.logout(false)
             preferencesRepository.saveToken(newToken.toToken())
         }
 

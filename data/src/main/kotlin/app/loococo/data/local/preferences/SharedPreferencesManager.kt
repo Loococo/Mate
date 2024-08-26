@@ -24,4 +24,8 @@ class SharedPreferencesManager(context: Context) {
             null
         }
     }
+
+    fun removeObject(key: String) {
+        sharedPreferences.edit().remove(key).apply()
+    }
 }

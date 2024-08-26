@@ -12,12 +12,12 @@ import retrofit2.http.POST
 
 interface AuthApi {
 
-    @POST("/api/aun/p/authn/login")
+    @POST("/api/usr/p/users/login")
     suspend fun login(@Body data: LoginRequest): Response<LoginResponse>
 
-    @POST("/api/aun/p/authn/register")
+    @POST("/api/usr/p/users/signup")
     suspend fun signUp(@Body data: SignUpRequest): Response<Unit>
 
-    @POST("/api/aun/p/authn/refresh")
+    @POST("/api/usr/p/users/refresh")
     fun refresh(@Body data: TokenRequest): Call<LoginTokenData>
 }

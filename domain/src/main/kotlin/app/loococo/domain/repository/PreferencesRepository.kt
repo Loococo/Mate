@@ -14,4 +14,6 @@ interface PreferencesRepository {
     fun saveToken(token: Token)
 
     fun getToken(): Token?
+
+    fun removeUser()
 }
