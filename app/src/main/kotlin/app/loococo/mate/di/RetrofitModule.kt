@@ -51,25 +51,24 @@ class RetrofitModule {
         clientBuilder: OkHttpClient.Builder,
         tokenAuthenticator: TokenAuthenticator,
         preferencesRepository: PreferencesRepository
-    ): OkHttpClient = clientBuilder
-        .addInterceptor { chain ->
-            if (preferencesRepository.getToken()?.accessToken != null) {
-                val old = chain.request()
-                val request = old.newBuilder()
-                    .removeHeader("Authorization")
-                    .addHeader(
-                        "Authorization",
-                        "Bearer ${preferencesRepository.getToken()!!.accessToken}"
-                    )
-                    .method(old.method, old.body)
-                    .build()
-                chain.proceed(request)
-            } else {
-                chain.proceed(chain.request())
+    ): OkHttpClient {
+        val token = preferencesRepository.getToken()?.accessToken
+
+        return clientBuilder
+            .addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val newRequest = token?.let {
+                    originalRequest.newBuilder()
+                        .removeHeader("Authorization")
+                        .addHeader("Authorization", "Bearer $it")
+                        .build()
+                } ?: originalRequest
+
+                chain.proceed(newRequest)
             }
-        }
-        .authenticator(tokenAuthenticator)
-        .build()
+            .authenticator(tokenAuthenticator)
+            .build()
+    }
 
     @OtherNetworkClient
     @Provides
